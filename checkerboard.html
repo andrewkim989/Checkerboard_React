@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+    <title>Checkerboard</title>
+    <script src = "https://unpkg.com/react@16.6.3/umd/react.development.js"></script>
+    <script src = "https://unpkg.com/react-dom@16.6.3/umd/react-dom.development.js"></script>
+    <script src = "https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity = "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin = "anonymous">
+    <style>
+        #board {
+            text-align: center;
+            margin-top: 20px;
+        }
+        input[type = "submit"] {
+            margin-left: 10px;
+        }
+        table {
+            margin: auto;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        table tr td {
+            width: 50px;
+            height: 50px;
+        }
+        .color1 {
+            background-color: darkblue;
+        }
+        .color2 {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id = "board"></div>
+    
+    <script type = "text/babel">
+    
+    class Table extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                input: "",
+                rows: 0
+            }
+            this.readInput = this.readInput.bind(this);
+            this.generate = this.generate.bind(this);
+        }
+
+        readInput(event) {
+            this.setState({input: event.target.value});
+        }
+
+        generate(e) {
+            e.preventDefault();
+            this.setState({rows: this.state.input});
+        }
+
+        render() {
+            return (
+                <div id = "main">
+                    <h3>Checkerboard</h3><br/>
+                    <form onSubmit = {this.generate} noValidate>
+                        <input type = "number" value = {this.state.input} onChange = {this.readInput} 
+                        placeholder = "How many rows?"></input>
+                        <input type = "submit" value = "Submit"></input>
+                    </form>
+                    <Board rows = {this.state.rows}/>
+                </div>
+            )
+        }
+    }
+
+    class Board extends React.Component {
+        render() {
+            var table = [];
+
+            for (var i = 0; i < this.props.rows; i++) {
+                var row = [];
+                for (var j = 0; j < this.props.rows; j++) {
+                    row.push(<td className = {"color" + ((i + j) % 2 + 1)}  key = {j}></td>)
+                }
+                table.push(<tr key = {i}>{row}</tr>);
+            }
+
+            return (
+                <table>
+                    <tbody>
+                        {table}
+                    </tbody>
+                </table>
+            )
+        }
+    }
+
+    ReactDOM.render(<Table/>, document.getElementById("board") );
+    </script>
+
+</body>
+</html>
